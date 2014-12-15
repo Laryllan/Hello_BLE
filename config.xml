@@ -3,7 +3,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "de.grothegruppe.#PRODUCTL#"
         versionCode = "10"
-        version     = "#VERSION#">
+        version     = "0.0.0.1">
 
   <name>Hello_BLE</name>
 
