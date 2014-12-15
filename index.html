@@ -21,7 +21,12 @@
 					
 					bluetoothSerial.list(function(devices) {
 						jQuery("#menu > span[data-menu='list']").text(devices.length);
-						for(var i = 0; i < devices[i].length; ++i) alert(devices[i].uuid);
+						if(devices.length) {
+							jQuery("#menu > span[data-menu='list']").text(devices[i].uuid);
+						}
+						else {
+							jQuery("#menu > span[data-menu='list']").text("xxx");
+						}
 					}, function() {
 						jQuery("#menu > span[data-menu='list']").text("-1");
 						alert("ERROR!");
