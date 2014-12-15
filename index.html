@@ -12,17 +12,18 @@
 						$btn.removeClass("on");
 					}
 					else {
-						$btn.text(typeof bluetoothSerial + (typeof bluetoothSerial !== "undefined" ? typeof bluetoothSerial.list : ""));
 						$btn.addClass("on");
 					}
 				});
 				
-				jQuery("#menu > span[data-menu='list']").on("touchend", function() {
-					jQuery("#menu > span[data-menu='list']").text(typeof bluetoothSerial);
+				jQuery("#menu > span[data-menu='list']").on("touchend", function() {				
+					jQuery("#menu > span[data-menu='list']").text("...");
 					
 					bluetoothSerial.list(function(devices) {
+						jQuery("#menu > span[data-menu='list']").text(devices.length);
 						for(var i = 0; i < devices[i].length; ++i) alert(devices[i].uuid);
 					}, function() {
+						jQuery("#menu > span[data-menu='list']").text("-1");
 						alert("ERROR!");
 					});
 				});
