@@ -4,32 +4,51 @@
 		<title>Hello_BLE</title>
 		<script src="phonegap.js"></script>
 		<script src="jquery.js"></script>
-		<script>
+		<script>		
 			jQuery(document).ready(function() {
+				var arduino = null;
+				var connected = false;
+				
 				var $btn = jQuery(".button");
 				$btn.on("touchend", function() {
+					if(!connected) return;
+					
 					if($btn.is(".on")) {
-						$btn.removeClass("on");
+						bluetoothSerial.write("led_0", function() {
+							$btn.removeClass("on");
+						});
 					}
 					else {
-						$btn.addClass("on");
+						bluetoothSerial.write("led_1", function() {
+							$btn.addClass("on");
+						});
 					}
 				});
 				
 				jQuery("#menu > span[data-menu='list']").on("touchend", function() {				
 					jQuery("#menu > span[data-menu='list']").text("...");
 					
-					bluetoothSerial.list(function(devices) {
-						jQuery("#menu > span[data-menu='list']").text(devices.length);
+					bluetoothSerial.list(function(devices) {					
 						if(devices.length) {
-							jQuery("#menu > span[data-menu='list']").text(devices[0].uuid);
+							arduino = devices[0].uuid;
+							jQuery("#menu > span[data-menu='list']").text(":)");
 						}
 						else {
-							jQuery("#menu > span[data-menu='list']").text("xxx");
+							jQuery("#menu > span[data-menu='list']").text(":(");
 						}
 					}, function() {
-						jQuery("#menu > span[data-menu='list']").text("-1");
-						alert("ERROR!");
+						jQuery("#menu > span[data-menu='list']").text("error");
+					});
+				});
+				
+				jQuery("#menu > span[data-menu='connect']").on("touchend", function() {				
+					jQuery("#menu > span[data-menu='connect']").text("...");
+										
+					bluetoothSerial.connect(arduino, function() {
+						jQuery("#menu > span[data-menu='connect']").text(":)");
+						connected = true;
+					}, function() {
+						jQuery("#menu > span[data-menu='connect']").text("error");
 					});
 				});
 			});
@@ -73,14 +92,14 @@
 				display:inline-block;
 				
 				width:90px;
-				height:60px;
-				padding-top:30px;
+				height:55px;
+				padding-top:35px;
 				
 				background-color:#FFF;				
 				color:#000;
 				
 				font-family:Verdana;
-				font-size:24px;
+				font-size:16px;
 				text-align:center;
 				
 				cursor:pointer;
@@ -94,6 +113,7 @@
 	<body>
 		<div id="menu">
 			<span data-menu="list">.list</span>
+			<span data-menu="connect">.connect</span>
 		</div>
 		<span class="button"></span>
 	</body>
